@@ -6,11 +6,11 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Middleware
+
 app.use(bodyParser.json());
 app.use(express.json());
 
-// Connect to MongoDB
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
-// Movie Schema
+
 const movieSchema = new mongoose.Schema({
   title: { type: String, required: true },
   director: { type: String, required: true },
@@ -29,9 +29,6 @@ const movieSchema = new mongoose.Schema({
 
 const Movie = mongoose.model("Movie", movieSchema);
 
-// Routes
-
-// 1. Create a new movie (POST)
 app.post("/movies", async (req, res) => {
   try {
     const movie = new Movie(req.body);
@@ -42,7 +39,7 @@ app.post("/movies", async (req, res) => {
   }
 });
 
-// 2. Get all movies or a specific movie by ID (GET)
+
 app.get("/movies/:id?", async (req, res) => {
   try {
     if (req.params.id) {
@@ -58,7 +55,7 @@ app.get("/movies/:id?", async (req, res) => {
   }
 });
 
-// 3. Update a movie (PUT)
+
 app.put("/movies/:id", async (req, res) => {
   try {
     const movie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -69,7 +66,7 @@ app.put("/movies/:id", async (req, res) => {
   }
 });
 
-// 4. Delete a movie (DELETE)
+
 app.delete("/movies/:id", async (req, res) => {
   try {
     const movie = await Movie.findByIdAndDelete(req.params.id);
@@ -80,7 +77,7 @@ app.delete("/movies/:id", async (req, res) => {
   }
 });
 
-// Start Server
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
